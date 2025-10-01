@@ -178,10 +178,16 @@ document.addEventListener('DOMContentLoaded', function() {
       const filterValue = this.getAttribute('data-filter');
       
       projectItems.forEach(item => {
-        if (filterValue === 'all' || item.getAttribute('data-category').includes(filterValue)) {
-          item.style.display = 'block';
+        const categories = item.getAttribute('data-category');
+        if (filterValue === 'all') {
+          item.style.display = '';
+          item.style.opacity = '1';
+        } else if (categories && categories.includes(filterValue)) {
+          item.style.display = '';
+          item.style.opacity = '1';
         } else {
           item.style.display = 'none';
+          item.style.opacity = '0';
         }
       });
     });
@@ -302,7 +308,32 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Current Year in Footer
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearElement = document.getElementById('year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+
+  // About Section Tabs
+  const aboutTabBtns = document.querySelectorAll('.tab-btn');
+  const aboutTabPanes = document.querySelectorAll('.tab-pane');
+
+  aboutTabBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Remove active class from all buttons and panes
+      aboutTabBtns.forEach(b => b.classList.remove('active'));
+      aboutTabPanes.forEach(p => p.classList.remove('active'));
+      
+      // Add active class to clicked button
+      this.classList.add('active');
+      
+      // Show corresponding pane
+      const targetTab = this.getAttribute('data-tab');
+      const targetPane = document.getElementById(targetTab);
+      if (targetPane) {
+        targetPane.classList.add('active');
+      }
+    });
+  });
 
   // Research Tabs
   const researchTabBtns = document.querySelectorAll('.research-tab-btn');
